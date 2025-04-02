@@ -1,0 +1,31 @@
+{
+  "name": "@bastienyoussfi/cursor-playbook",
+  "version": "1.0.0",
+  "description": "Predefined Cursor rules for AI-assisted coding",
+  "main": "dist/src/index.js",
+  "bin": {
+    "cursor-playbook": "dist/bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "postbuild": "cp -r src/*.mdc dist/src/",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "cursor",
+    "ai",
+    "typescript",
+    "rules"
+  ],
+  "author": "Bastien Youssfi",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.13.17",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "commander": "^13.1.0",
+    "fs-extra": "^11.3.0"
+  }
+}

@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# TypeScript Guidelines
+- Always use strict mode in tsconfig.json
+- Prefer interfaces over types for object definitions
+- Avoid using 'any'; define explicit types instead
+- Use async/await over .then() for promises
+- Write descriptive variable names (e.g., isLoading, hasError)
+- Export one main component/function per file
