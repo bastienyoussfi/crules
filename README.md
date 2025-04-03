@@ -16,6 +16,7 @@ npm install -g @bastienyoussfi/cursor-playbook
 - Save and apply rule profiles
 - Store user-specific rule configurations
 - Tab completion for all commands and arguments
+- JSON export/import for community sharing
 
 ## Usage
 
@@ -102,6 +103,43 @@ List all saved profiles:
 
 ```bash
 cursor-playbook list-profiles
+```
+
+### Community Sharing
+
+Export your rules to a JSON file for sharing with the community:
+
+```bash
+cursor-playbook export-json my-awesome-rules.json
+```
+
+Import rules from a shared JSON file:
+
+```bash
+cursor-playbook import-json my-awesome-rules.json
+```
+
+Use the `--overwrite` flag to replace existing rules when importing:
+
+```bash
+cursor-playbook import-json my-awesome-rules.json --overwrite
+```
+
+The exported JSON file includes metadata (project name, description, export date) and all rule contents, making it easy to share on GitHub, in blog posts, or other community platforms.
+
+### Repository Structure
+
+To contribute rules to the community, you can structure your repository like this:
+
+```
+my-cursor-rules/
+├── README.md                 # Description and usage instructions
+├── rules/                    # Directory containing individual rule files
+│   ├── typescript.mdc        # Individual rule file
+│   └── react.mdc             # Individual rule file
+└── packages/                 # Pre-configured rule packages for easy import 
+    ├── typescript-basic.json # Package with basic TypeScript rules
+    └── react-best-practices.json # Package with React best practices
 ```
 
 ## Adding Your Own Rule Groups

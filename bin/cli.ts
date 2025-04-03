@@ -96,7 +96,7 @@ _cursor_playbook_complete() {
       ;;
     cursor-playbook)
       # Complete with commands
-      COMPREPLY=( $(compgen -W "add add-group list create export import save-profile apply-profile list-profiles completion" -- "\${cur}") )
+      COMPREPLY=( $(compgen -W "add add-group list create export import save-profile apply-profile list-profiles completion export-json import-json" -- "\${cur}") )
       return 0
       ;;
   esac
@@ -402,6 +402,98 @@ program
       const ruleCount = fs.readdirSync(profileDir).filter(file => file.endsWith('.mdc')).length;
       console.log(`- ${profile} (${ruleCount} rules)`);
     });
+  });
+
+program
+  .command("export-json [filename]")
+  .description("Export current rules to a JSON file for sharing")
+  .action(async (filename: string = "cursor-rules.json") => {
+    if (!fs.existsSync(targetDir)) {
+      console.error("No rules found in current project.");
+      process.exit(1);
+    }
+    
+    try {
+      const rules: Record<string, string> = {};
+      const ruleFiles = fs.readdirSync(targetDir).filter(file => file.endsWith('.mdc'));
+      
+      // Read all rule files and add them to the JSON
+      for (const ruleFile of ruleFiles) {
+        const ruleName = ruleFile.replace('.mdc', '');
+        const ruleContent = fs.readFileSync(path.join(targetDir, ruleFile), 'utf8');
+        rules[ruleName] = ruleContent;
+      }
+      
+      // Create a metadata object
+      const exportData = {
+        name: path.basename(process.cwd()),
+        description: "Exported Cursor Playbook rules",
+        exported_at: new Date().toISOString(),
+        rules
+      };
+      
+      // Write to the specified file
+      await fs.writeJSON(filename, exportData, { spaces: 2 });
+      console.log(`Exported ${Object.keys(rules).length} rules to ${filename}`);
+    } catch (err) {
+      console.error("Error exporting rules to JSON:", err);
+      process.exit(1);
+    }
+  });
+
+program
+  .command("import-json <filename>")
+  .description("Import rules from a JSON file")
+  .option("-o, --overwrite", "Overwrite existing rules")
+  .action(async (filename: string, options) => {
+    if (!fs.existsSync(filename)) {
+      console.error(`File ${filename} not found.`);
+      process.exit(1);
+    }
+    
+    try {
+      // Read and parse the JSON file
+      const importData = await fs.readJSON(filename);
+      
+      if (!importData.rules || typeof importData.rules !== 'object') {
+        console.error("Invalid JSON format. Expected 'rules' object.");
+        process.exit(1);
+      }
+      
+      await fs.ensureDir(targetDir);
+      
+      // Import each rule
+      const rules = importData.rules as Record<string, string>;
+      let importedCount = 0;
+      let skippedCount = 0;
+      
+      for (const [ruleName, ruleContent] of Object.entries(rules)) {
+        const targetPath = path.join(targetDir, `${ruleName}.mdc`);
+        
+        // Check if rule already exists
+        if (fs.existsSync(targetPath) && !options.overwrite) {
+          console.log(`Skipping existing rule: ${ruleName} (use --overwrite to replace)`);
+          skippedCount++;
+          continue;
+        }
+        
+        // Write the rule file
+        await fs.writeFile(targetPath, ruleContent);
+        importedCount++;
+      }
+      
+      console.log(`Imported ${importedCount} rules from ${filename}`);
+      if (skippedCount > 0) {
+        console.log(`Skipped ${skippedCount} existing rules`);
+      }
+      
+      if (importData.name || importData.description) {
+        console.log(`Source: ${importData.name || "Unnamed"} - ${importData.description || ""}`);
+      }
+    } catch (err) {
+      console.error("Error importing rules from JSON:", err);
+      process.exit(1);
+    }
   });
 
 program.parse(process.argv);
