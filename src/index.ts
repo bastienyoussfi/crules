@@ -29,3 +29,15 @@ export const listRules = (): string[] => {
     .readdirSync(rulesDir)
     .filter((file: string) => file.endsWith(".mdc"));
 };
+
+/**
+ * Returns predefined groups of related rules
+ * @returns An object mapping group names to arrays of rule names
+ */
+export const getRuleGroups = (): Record<string, string[]> => {
+  return {
+    typescript: ["typescript"],
+    react: ["react"],
+    all: listRules().map(file => file.replace('.mdc', ''))
+  };
+};
