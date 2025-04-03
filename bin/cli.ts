@@ -17,6 +17,116 @@ const targetDir = path.join(process.cwd(), ".cursor/rules");
 // User registry directory for storing custom rules
 const userRegistryDir = path.join(os.homedir(), ".cursor-playbook");
 
+/**
+ * Get all available rule names (built-in and user rules)
+ */
+function getAllRuleNames(): string[] {
+  const builtinRules = listRules().map(file => file.replace('.mdc', ''));
+  
+  // Get user rules if they exist
+  const userRulesDir = path.join(userRegistryDir, "rules");
+  let userRules: string[] = [];
+  
+  if (fs.existsSync(userRulesDir)) {
+    userRules = fs.readdirSync(userRulesDir)
+      .filter(file => file.endsWith('.mdc'))
+      .map(file => file.replace('.mdc', ''));
+  }
+  
+  return [...builtinRules, ...userRules];
+}
+
+/**
+ * Get all profile names
+ */
+function getAllProfileNames(): string[] {
+  const profilesDir = path.join(userRegistryDir, "profiles");
+  
+  if (!fs.existsSync(profilesDir)) {
+    return [];
+  }
+  
+  return fs.readdirSync(profilesDir)
+    .filter(file => fs.statSync(path.join(profilesDir, file)).isDirectory());
+}
+
+// Setup tab completion support
+program
+  .enablePositionalOptions()
+  .configureOutput({ writeOut: (str) => process.stdout.write(str) });
+
+// Setup auto-completion
+program
+  .command("completion")
+  .description("Generate shell completion script")
+  .action(() => {
+    // Output the completion script
+    console.log(`
+# cursor-playbook completion
+# bash completion for cursor-playbook CLI
+
+_cursor_playbook_complete() {
+  local cur prev words
+  COMPREPLY=()
+  cur="\${COMP_WORDS[COMP_CWORD]}"
+  prev="\${COMP_WORDS[COMP_CWORD-1]}"
+
+  case "\${prev}" in
+    add)
+      # Complete with rule names
+      COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion rules)" -- "\${cur}") )
+      return 0
+      ;;
+    add-group)
+      # Complete with group names
+      COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion groups)" -- "\${cur}") )
+      return 0
+      ;;
+    export|import)
+      # Complete with rule names
+      COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion rules)" -- "\${cur}") )
+      return 0
+      ;;
+    save-profile|apply-profile)
+      # Complete with profile names for apply-profile
+      if [ "\${prev}" = "apply-profile" ]; then
+        COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion profiles)" -- "\${cur}") )
+      fi
+      return 0
+      ;;
+    cursor-playbook)
+      # Complete with commands
+      COMPREPLY=( $(compgen -W "add add-group list create export import save-profile apply-profile list-profiles completion" -- "\${cur}") )
+      return 0
+      ;;
+  esac
+
+  # Default to file completion
+  return 0
+}
+
+complete -F _cursor_playbook_complete cursor-playbook
+`);
+  });
+
+// Add command to list completions (used by completion script)
+program
+  .command("list-for-completion <type>")
+  .description("List items for shell completion (internal use)")
+  .action((type: string) => {
+    switch(type) {
+      case "rules":
+        console.log(getAllRuleNames().join(" "));
+        break;
+      case "groups":
+        console.log(Object.keys(getRuleGroups()).join(" "));
+        break;
+      case "profiles":
+        console.log(getAllProfileNames().join(" "));
+        break;
+    }
+  });
+
 program
   .command("add <rule>")
   .description("Add a specific Cursor rule to your project")

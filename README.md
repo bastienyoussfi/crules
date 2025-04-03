@@ -15,8 +15,26 @@ npm install -g @bastienyoussfi/cursor-playbook
 - Export/import rules between projects
 - Save and apply rule profiles
 - Store user-specific rule configurations
+- Tab completion for all commands and arguments
 
 ## Usage
+
+### Tab Completion
+
+Enable tab completion in your shell to easily navigate commands, rules, and profiles:
+
+```bash
+# Add this to your ~/.bashrc or ~/.zshrc
+source <(cursor-playbook completion)
+```
+
+After sourcing the completion script, you can use tab completion for commands and arguments:
+
+```bash
+cursor-playbook add <TAB>       # Shows available rules
+cursor-playbook add-group <TAB> # Shows available rule groups
+cursor-playbook apply-profile <TAB> # Shows available profiles
+```
 
 ### Basic Commands
 
