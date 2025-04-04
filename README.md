@@ -1,6 +1,6 @@
-# Cursor Playbook
+# Crules
 
-A package for managing reusable [Cursor](https://cursor.sh/) rules across projects. Cursor Playbook allows you to define, share, and reuse AI coding guidelines in different projects.
+A package for managing reusable [Cursor](https://cursor.sh/) rules across projects. Crules allows you to define, share, and reuse AI coding guidelines in different projects.
 
 ## Installation
 
