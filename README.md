@@ -5,7 +5,7 @@ A package for managing reusable [Cursor](https://cursor.sh/) rules across projec
 ## Installation
 
 ```bash
-npm install -g @bastienyoussfi/cursor-playbook
+npm install -g @bastienyoussfi/crules
 ```
 
 ## Features
@@ -26,15 +26,15 @@ Enable tab completion in your shell to easily navigate commands, rules, and prof
 
 ```bash
 # Add this to your ~/.bashrc or ~/.zshrc
-source <(cursor-playbook completion)
+source <(crules completion)
 ```
 
 After sourcing the completion script, you can use tab completion for commands and arguments:
 
 ```bash
-cursor-playbook add <TAB>       # Shows available rules
-cursor-playbook add-group <TAB> # Shows available rule groups
-cursor-playbook apply-profile <TAB> # Shows available profiles
+crules add <TAB>       # Shows available rules
+crules add-group <TAB> # Shows available rule groups
+crules apply-profile <TAB> # Shows available profiles
 ```
 
 ### Basic Commands
@@ -42,19 +42,19 @@ cursor-playbook apply-profile <TAB> # Shows available profiles
 Add a rule to your project:
 
 ```bash
-cursor-playbook add typescript
+crules add typescript
 ```
 
 List available rules:
 
 ```bash
-cursor-playbook list
+crules list
 ```
 
 Create a new rule template:
 
 ```bash
-cursor-playbook create my-rule
+crules create my-rule
 ```
 
 ### Rule Groups
@@ -62,7 +62,7 @@ cursor-playbook create my-rule
 Add a group of related rules at once:
 
 ```bash
-cursor-playbook add-group typescript
+crules add-group typescript
 ```
 
 ### User Registry
@@ -70,19 +70,19 @@ cursor-playbook add-group typescript
 Create a rule in your user registry (accessible across all projects):
 
 ```bash
-cursor-playbook create my-custom-rule --global
+crules create my-custom-rule --global
 ```
 
 Export a project rule to your user registry:
 
 ```bash
-cursor-playbook export my-rule
+crules export my-rule
 ```
 
 Import a rule from your user registry to your current project:
 
 ```bash
-cursor-playbook import my-custom-rule
+crules import my-custom-rule
 ```
 
 ### Profiles
@@ -90,19 +90,19 @@ cursor-playbook import my-custom-rule
 Save all your current project rules as a profile:
 
 ```bash
-cursor-playbook save-profile my-typescript-project
+crules save-profile my-typescript-project
 ```
 
 Apply a saved profile to a new project:
 
 ```bash
-cursor-playbook apply-profile my-typescript-project
+crules apply-profile my-typescript-project
 ```
 
 List all saved profiles:
 
 ```bash
-cursor-playbook list-profiles
+crules list-profiles
 ```
 
 ### Community Sharing
@@ -110,19 +110,19 @@ cursor-playbook list-profiles
 Export your rules to a JSON file for sharing with the community:
 
 ```bash
-cursor-playbook export-json my-awesome-rules.json
+crules export-json my-awesome-rules.json
 ```
 
 Import rules from a shared JSON file:
 
 ```bash
-cursor-playbook import-json my-awesome-rules.json
+crules import-json my-awesome-rules.json
 ```
 
 Use the `--overwrite` flag to replace existing rules when importing:
 
 ```bash
-cursor-playbook import-json my-awesome-rules.json --overwrite
+crules import-json my-awesome-rules.json --overwrite
 ```
 
 The exported JSON file includes metadata (project name, description, export date) and all rule contents, making it easy to share on GitHub, in blog posts, or other community platforms.

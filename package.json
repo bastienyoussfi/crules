@@ -1,10 +1,10 @@
 {
-  "name": "@bastienyoussfi/cursor-playbook",
+  "name": "@bastienyoussfi/crules",
   "version": "1.0.0",
   "description": "Predefined Cursor rules for AI-assisted coding",
   "main": "dist/src/index.js",
   "bin": {
-    "cursor-playbook": "dist/bin/cli.js"
+    "crules": "dist/bin/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -25,7 +25,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@bastienyoussfi/cursor-playbook": "^1.0.0",
+    "@bastienyoussfi/crules": "^1.0.0",
     "commander": "^13.1.0",
     "fs-extra": "^11.3.0"
   }

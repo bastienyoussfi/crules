@@ -15,7 +15,7 @@ const effectiveRulesDir = fs.existsSync(rulesDir) ? rulesDir : compiledRulesDir;
 const targetDir = path.join(process.cwd(), ".cursor/rules");
 
 // User registry directory for storing custom rules
-const userRegistryDir = path.join(os.homedir(), ".cursor-playbook");
+const userRegistryDir = path.join(os.homedir(), ".crules");
 
 /**
  * Get all available rule names (built-in and user rules)
@@ -62,10 +62,10 @@ program
   .action(() => {
     // Output the completion script
     console.log(`
-# cursor-playbook completion
-# bash completion for cursor-playbook CLI
+# crules completion
+# bash completion for crules CLI
 
-_cursor_playbook_complete() {
+_crules_complete() {
   local cur prev words
   COMPREPLY=()
   cur="\${COMP_WORDS[COMP_CWORD]}"
@@ -74,27 +74,27 @@ _cursor_playbook_complete() {
   case "\${prev}" in
     add)
       # Complete with rule names
-      COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion rules)" -- "\${cur}") )
+      COMPREPLY=( $(compgen -W "$(crules list-for-completion rules)" -- "\${cur}") )
       return 0
       ;;
     add-group)
       # Complete with group names
-      COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion groups)" -- "\${cur}") )
+      COMPREPLY=( $(compgen -W "$(crules list-for-completion groups)" -- "\${cur}") )
       return 0
       ;;
     export|import)
       # Complete with rule names
-      COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion rules)" -- "\${cur}") )
+      COMPREPLY=( $(compgen -W "$(crules list-for-completion rules)" -- "\${cur}") )
       return 0
       ;;
     save-profile|apply-profile)
       # Complete with profile names for apply-profile
       if [ "\${prev}" = "apply-profile" ]; then
-        COMPREPLY=( $(compgen -W "$(cursor-playbook list-for-completion profiles)" -- "\${cur}") )
+        COMPREPLY=( $(compgen -W "$(crules list-for-completion profiles)" -- "\${cur}") )
       fi
       return 0
       ;;
-    cursor-playbook)
+    crules)
       # Complete with commands
       COMPREPLY=( $(compgen -W "add add-group list create export import save-profile apply-profile list-profiles completion export-json import-json" -- "\${cur}") )
       return 0
@@ -105,7 +105,7 @@ _cursor_playbook_complete() {
   return 0
 }
 
-complete -F _cursor_playbook_complete cursor-playbook
+complete -F _crules_complete crules
 `);
   });
 
